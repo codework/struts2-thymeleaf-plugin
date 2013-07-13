@@ -46,7 +46,7 @@ The following template displays the message property of the action.
 
     <body>
 
-    <h1 th:utext="#{home.welcome}">Welcome</h1>
+    <h1 th:text="#{home.welcome}">Welcome</h1>
     <p th:text="${action.message}">This message is only seen during prototyping.</p>
 
     </body>
