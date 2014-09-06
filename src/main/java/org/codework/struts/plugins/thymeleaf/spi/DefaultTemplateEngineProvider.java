@@ -19,36 +19,83 @@ import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.opensymphony.xwork2.inject.Inject;
+
 /**
  * A default implementation of {@link TemplateEngineProvider}.
  *
- * @author Steven Benitez
+ * @author Steven Benitez ( Update A-pZ | koji.azuma )
  * @since 2.3.15
+ * @version 2.3.16.3
  */
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
-  private TemplateEngine templateEngine;
+	private TemplateEngine templateEngine;
 
-  public DefaultTemplateEngineProvider() {
-    ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-    // HTML5 is the future!
-    templateResolver.setTemplateMode("HTML5");
+	public DefaultTemplateEngineProvider() {
 
-    // This will convert "home" to "/WEB-INF/templates/home.html"
-    //templateResolver.setPrefix("/WEB-INF/templates/");
-    //templateResolver.setSuffix(".html");
+	}
 
-    templateResolver.setCacheable(true);
-    // Set template cache TTL to 1 hour. If not set, entries would live in cache
-    // until expelled by LRU
-    templateResolver.setCacheTTLMs(3600000L);
+	/**
+	 * Configure setting from struts.properties|struts.xml.
+	 * @see Inject
+	 */
+	public void configure() {
+		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+		// HTML5 is the future!
+		templateResolver.setTemplateMode(this.templateMode);
 
-    templateEngine = new TemplateEngine();
-    templateEngine.setTemplateResolver(templateResolver);
-    templateEngine.setMessageResolver(new StrutsMessageResolver());
-  }
+		// This will convert "home" to "/WEB-INF/templates/home.html"
+		templateResolver.setPrefix(this.prefix);
+		templateResolver.setSuffix(this.suffix);
 
-  @Override
-  public TemplateEngine get() {
-    return templateEngine;
-  }
+		templateResolver.setCacheable(this.cacheable);
+		// Set template cache TTL to 1 hour. If not set, entries would live in
+		// cache
+		// until expelled by LRU
+		templateResolver.setCacheTTLMs(this.cacheTTLMs);
+
+		templateEngine = new TemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
+		templateEngine.setMessageResolver(new StrutsMessageResolver());
+	}
+
+	@Override
+	public TemplateEngine get() {
+		if (templateEngine == null) {
+			configure();
+		}
+
+		return templateEngine;
+	}
+
+	@Inject(value = "struts.thymeleaf.templateMode", required = false)
+	public void setTemplateMode(String templateMode) {
+		this.templateMode = templateMode;
+	}
+
+	@Inject(value = "struts.thymeleaf.prefix", required = false)
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	@Inject(value = "struts.thymeleaf.suffix", required = false)
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
+
+	@Inject(value = "struts.thymeleaf.cacheable", required = false)
+	public void setCacheable(String cacheable) {
+		this.cacheable = Boolean.parseBoolean(cacheable);
+	}
+
+	@Inject(value = "struts.thymeleaf.cacheTTLMs", required = false)
+	public void setCacheTTLMs(String cacheTTLMs) {
+		this.cacheTTLMs = Long.parseLong(cacheTTLMs);
+	}
+
+	private String templateMode = "HTML5";
+	private String prefix = "/WEB-INF/templates/";
+	private String suffix = ".html";
+	private boolean cacheable = true;
+	private Long cacheTTLMs = 3600000L;
 }
