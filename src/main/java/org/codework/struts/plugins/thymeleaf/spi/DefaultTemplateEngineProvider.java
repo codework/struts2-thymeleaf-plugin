@@ -15,11 +15,10 @@
  */
 package org.codework.struts.plugins.thymeleaf.spi;
 
+import com.opensymphony.xwork2.inject.Inject;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
-import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * A default implementation of {@link TemplateEngineProvider}.
@@ -28,74 +27,74 @@ import com.opensymphony.xwork2.inject.Inject;
  * @since 2.3.15
  */
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
-	private TemplateEngine templateEngine;
+  // HTML5 is the future!
+  private String templateMode = "HTML5";
+  private String characterEncoding = "UTF-8";
+  // This will convert "home" to "/WEB-INF/templates/home.html"
+  private String prefix = "/WEB-INF/templates/";
+  private String suffix = ".html";
+  private boolean cacheable = true;
 
-	public DefaultTemplateEngineProvider() {
+  // Default template cache TTL to 1 hour. If not set, entries would live in
+  // cache until expelled by LRU.
+  private Long cacheTtlMs = 3600000L;
 
-	}
+  private TemplateEngine templateEngine;
 
-	/**
-	 * Configure setting from struts.properties|struts.xml.
-	 * @see Inject
-	 */
-	public void configure() {
-		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-		// HTML5 is the future!
-		templateResolver.setTemplateMode(this.templateMode);
-    templateResolver.setCharacterEncoding("UTF-8");
+  /**
+   * Configure settings from the struts.xml or struts.properties, using sensible
+   * defaults if values are not provided.
+   */
+  public void configure() {
+    ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+    templateResolver.setTemplateMode(templateMode);
+    templateResolver.setCharacterEncoding(characterEncoding);
+    templateResolver.setPrefix(prefix);
+    templateResolver.setSuffix(suffix);
+    templateResolver.setCacheable(cacheable);
+    templateResolver.setCacheTTLMs(cacheTtlMs);
 
-		// This will convert "home" to "/WEB-INF/templates/home.html"
-		templateResolver.setPrefix(this.prefix);
-		templateResolver.setSuffix(this.suffix);
+    templateEngine = new TemplateEngine();
+    templateEngine.setTemplateResolver(templateResolver);
+    templateEngine.setMessageResolver(new StrutsMessageResolver());
+  }
 
-		templateResolver.setCacheable(this.cacheable);
-		// Set template cache TTL to 1 hour. If not set, entries would live in
-		// cache
-		// until expelled by LRU
-		templateResolver.setCacheTTLMs(this.cacheTTLMs);
+  @Override
+  public TemplateEngine get() {
+    if (templateEngine == null) {
+      configure();
+    }
 
-		templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
-		templateEngine.setMessageResolver(new StrutsMessageResolver());
-	}
+    return templateEngine;
+  }
 
-	@Override
-	public TemplateEngine get() {
-		if (templateEngine == null) {
-			configure();
-		}
+  @Inject(value = "struts.thymeleaf.templateMode", required = false)
+  public void setTemplateMode(String templateMode) {
+    this.templateMode = templateMode;
+  }
 
-		return templateEngine;
-	}
+  @Inject(value = "struts.thymeleaf.encoding", required = false)
+  public void setCharacterEncoding(String characterEncoding) {
+    this.characterEncoding = characterEncoding;
+  }
 
-	@Inject(value = "struts.thymeleaf.templateMode", required = false)
-	public void setTemplateMode(String templateMode) {
-		this.templateMode = templateMode;
-	}
+  @Inject(value = "struts.thymeleaf.prefix", required = false)
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
+  }
 
-	@Inject(value = "struts.thymeleaf.prefix", required = false)
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+  @Inject(value = "struts.thymeleaf.suffix", required = false)
+  public void setSuffix(String suffix) {
+    this.suffix = suffix;
+  }
 
-	@Inject(value = "struts.thymeleaf.suffix", required = false)
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
+  @Inject(value = "struts.thymeleaf.cacheable", required = false)
+  public void setCacheable(String cacheable) {
+    this.cacheable = Boolean.parseBoolean(cacheable);
+  }
 
-	@Inject(value = "struts.thymeleaf.cacheable", required = false)
-	public void setCacheable(String cacheable) {
-		this.cacheable = Boolean.parseBoolean(cacheable);
-	}
-
-	@Inject(value = "struts.thymeleaf.cacheTTLMs", required = false)
-	public void setCacheTTLMs(String cacheTTLMs) {
-		this.cacheTTLMs = Long.parseLong(cacheTTLMs);
-	}
-
-	private String templateMode = "HTML5";
-	private String prefix = "/WEB-INF/templates/";
-	private String suffix = ".html";
-	private boolean cacheable = true;
-	private Long cacheTTLMs = 3600000L;
+  @Inject(value = "struts.thymeleaf.cacheTtlMs", required = false)
+  public void setCacheTTLMs(String cacheTtlMs) {
+    this.cacheTtlMs = Long.parseLong(cacheTtlMs);
+  }
 }
