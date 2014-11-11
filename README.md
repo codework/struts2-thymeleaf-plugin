@@ -58,6 +58,18 @@ The following template displays the message property of the action.
 This plugin will cause Thymeleaf to look in the Struts2 i18n resource bundles
 to resolve messages.
 
+## Configuration
+
+The following reflects the default settings.
+
+    <constant name="struts.thymeleaf.templateMode" value="HTML5"/>
+    <constant name="struts.thymeleaf.encoding" value="UTF-8"/>
+    <constant name="struts.thymeleaf.prefix" value="/WEB-INF/templates/"/>
+    <constant name="struts.thymeleaf.suffix" value=".html"/>
+    <constant name="struts.thymeleaf.cacheable" value="true"/>
+    <constant name="struts.thymeleaf.cacheTtlMillis" value="3600000"/>
+
+
 ## License
 
     Copyright 2013 Steven Benitez.

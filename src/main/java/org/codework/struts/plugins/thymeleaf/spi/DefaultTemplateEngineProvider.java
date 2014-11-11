@@ -37,7 +37,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
   // Default template cache TTL to 1 hour. If not set, entries would live in
   // cache until expelled by LRU.
-  private Long cacheTtlMs = 3600000L;
+  private Long cacheTtlMillis = 3600000L;
 
   private TemplateEngine templateEngine;
 
@@ -52,7 +52,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
     templateResolver.setPrefix(prefix);
     templateResolver.setSuffix(suffix);
     templateResolver.setCacheable(cacheable);
-    templateResolver.setCacheTTLMs(cacheTtlMs);
+    templateResolver.setCacheTTLMs(cacheTtlMillis);
 
     templateEngine = new TemplateEngine();
     templateEngine.setTemplateResolver(templateResolver);
@@ -93,8 +93,8 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
     this.cacheable = Boolean.parseBoolean(cacheable);
   }
 
-  @Inject(value = "struts.thymeleaf.cacheTtlMs", required = false)
-  public void setCacheTTLMs(String cacheTtlMs) {
-    this.cacheTtlMs = Long.parseLong(cacheTtlMs);
+  @Inject(value = "struts.thymeleaf.cacheTtlMillis", required = false)
+  public void setCacheTtlMillis(String cacheTtlMillis) {
+    this.cacheTtlMillis = Long.parseLong(cacheTtlMillis);
   }
 }
