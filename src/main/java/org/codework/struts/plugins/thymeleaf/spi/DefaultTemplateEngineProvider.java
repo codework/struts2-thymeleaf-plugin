@@ -32,6 +32,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
     ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
     // HTML5 is the future!
     templateResolver.setTemplateMode("HTML5");
+    templateResolver.setCharacterEncoding("UTF-8");
 
     // This will convert "home" to "/WEB-INF/templates/home.html"
     //templateResolver.setPrefix("/WEB-INF/templates/");

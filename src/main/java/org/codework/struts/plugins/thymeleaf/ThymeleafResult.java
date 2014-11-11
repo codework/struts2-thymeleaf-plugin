@@ -64,7 +64,8 @@ public class ThymeleafResult implements Result {
 
     Object action = actionInvocation.getAction();
     StrutsContext context = new StrutsContext(request, response, servletContext, action);
-    response.setContentType("Content-Type: text/html; charset=" + defaultEncoding);
+    response.setContentType("text/html");
+    response.setCharacterEncoding(defaultEncoding);
     templateEngine.process(templateName, context, response.getWriter());
   }
 
