@@ -7,7 +7,7 @@
 <struts>
     <bean type="org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider" name="default" class="org.codework.struts.plugins.thymeleaf.spi.DefaultTemplateEngineProvider" />
 
-    <package name="struts-thymeleaf" extends="struts-default">
+	<package name="struts-thymeleaf" extends="struts-default">
         <result-types>
             <result-type name="thymeleaf" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
         </result-types>
