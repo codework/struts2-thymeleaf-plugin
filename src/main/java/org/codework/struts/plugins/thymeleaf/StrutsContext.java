@@ -15,22 +15,12 @@
  */
 package org.codework.struts.plugins.thymeleaf;
 
-import java.util.Iterator;
-import java.util.Map;
+import com.opensymphony.xwork2.LocaleProvider;
+import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.thymeleaf.context.WebContext;
-
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.LocaleProvider;
-import com.opensymphony.xwork2.ognl.OgnlValueStack;
-import com.opensymphony.xwork2.util.ValueStack;
 
 /**
  * Extends the {@link org.thymeleaf.context.WebContext} to provide access to the
@@ -44,7 +34,6 @@ import com.opensymphony.xwork2.util.ValueStack;
  * @author Steven Benitez
  * @since 2.3.15
  */
-@Slf4j
 public class StrutsContext extends WebContext {
   /**
    * Name of the variable that contains the action.
@@ -60,42 +49,11 @@ public class StrutsContext extends WebContext {
     if (action instanceof LocaleProvider) {
       setLocale(((LocaleProvider) action).getLocale());
     }
-    ValueStack stack = null;
-    // If found "TypeConversion Error" , repopulation request parameter.
-    if (action instanceof ActionSupport) {
-      repopulateConvertionErrorField();
-      stack = ActionContext.getContext().getValueStack();
-    }
-
-
 
     setVariable(ACTION_VARIABLE_NAME, action);
   }
 
   public Object getAction() {
     return action;
-  }
-
-  /**
-   * If found type conversion error ,
-   * original request paremeter repopulate same name.
-   */
-  void repopulateConvertionErrorField() {
-	  OgnlValueStack stack = (OgnlValueStack) ActionContext.getContext().getValueStack();
-	Map<Object, Object> overrides = stack.getExprOverrides();
-	// if ( overrides != null && !overrides.isEmpty()) {
-	if (overrides != null) {
-		log.debug("overrides:" + overrides.toString());
-
-		Iterator keys = overrides.keySet().iterator();
-		while (keys.hasNext()) {
-			String key = (String)keys.next();
-			Object overval = overrides.get(key);
-
-			stack.setValue(key, overval, false);
-		}
-
-		ActionContext.getContext().setValueStack(stack);
-	}
   }
 }

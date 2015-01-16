@@ -16,6 +16,7 @@
 package org.codework.struts.plugins.thymeleaf;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,7 +32,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.context.SpringWebContext;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.LocaleProvider;
 import com.opensymphony.xwork2.Result;
 import com.opensymphony.xwork2.inject.Inject;
@@ -57,6 +60,15 @@ public class ThymeleafSpringResult implements Result {
 	 */
 	public static final String DEFAULT_PARAM = "templateName";
 
+	/** instance name of struts2-action */
+	public static final String ACTION_VARIABLE_NAME = "action";
+
+	/** field errors */
+	public static final String FIELD_ERRORS_NAME ="field";
+
+	/** struts2 convertion errors fields and value */
+	public static final String OVERWRITE_NAME = "overwrite";
+
 	public ThymeleafSpringResult() {
 	}
 
@@ -76,8 +88,7 @@ public class ThymeleafSpringResult implements Result {
 		Object action = actionInvocation.getAction();
 
 		// Action instance put to Thymeleaf context.
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("action", action);
+		Map<String, Object> variables = bindStrutsContest(action);
 
 		// Locale by Struts2-Action.
 		Locale locale = ((LocaleProvider) action).getLocale();
@@ -108,5 +119,29 @@ public class ThymeleafSpringResult implements Result {
 
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
+	}
+
+	/**
+	 * Binding Struts2 action and context, field-errors , convertion error values bind another name.
+	 * @param action Action instance
+	 * @return ContextMap
+	 */
+	Map<String, Object> bindStrutsContest(Object action) {
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put(ACTION_VARIABLE_NAME, action);
+
+		if ( action instanceof ActionSupport) {
+			ActionSupport actSupport = (ActionSupport)action;
+
+			// Struts2 field errors.( Map<fieldname , fielderrors>)
+			Map<String, List<String>> fieldErrors = actSupport.getFieldErrors();
+			variables.put(FIELD_ERRORS_NAME, fieldErrors);
+
+			// Struts2 convertion errors
+			ActionContext ctx = ActionContext.getContext();
+			variables.put(OVERWRITE_NAME, ctx.getValueStack().getExprOverrides());
+		}
+
+		return variables;
 	}
 }
