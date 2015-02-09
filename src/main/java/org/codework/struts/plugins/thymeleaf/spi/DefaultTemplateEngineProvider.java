@@ -15,11 +15,18 @@
  */
 package org.codework.struts.plugins.thymeleaf.spi;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Inject;
 
 /**
@@ -28,6 +35,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * @author Steven Benitez
  * @since 2.3.15
  */
+@Slf4j
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	// HTML5 is the future!
 	private String templateMode = "HTML5";
@@ -41,7 +49,11 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	// cache until expelled by LRU.
 	private Long cacheTtlMillis = 3600000L;
 
-	private TemplateEngine templateEngine;
+	protected TemplateEngine templateEngine;
+
+	private String templateEngineName;
+	private Container container;
+	private Map<String, TemplateEngine> templateEngines = new HashMap<String, TemplateEngine>();
 
 	/**
 	 * Configure settings from the struts.xml or struts.properties, using
@@ -56,17 +68,12 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 		templateResolver.setCacheable(cacheable);
 		templateResolver.setCacheTTLMs(cacheTtlMillis);
 
-		templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver);
 		templateEngine.setMessageResolver(new StrutsMessageResolver());
 	}
 
 	@Override
 	public TemplateEngine get() {
-		if ( templateEngine == null ) {
-			configure();
-		}
-
 		return templateEngine;
 	}
 
@@ -98,5 +105,39 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	@Inject(value = "struts.thymeleaf.cacheTtlMillis", required = false)
 	public void setCacheTtlMillis(String cacheTtlMillis) {
 		this.cacheTtlMillis = Long.parseLong(cacheTtlMillis);
+	}
+
+	/**
+	 * Thymeleaf template type loading from struts.properties.
+	 * @param templateEngineType ( default | spring )
+	 */
+	@Inject(value = "struts.thymeleaf.templateEngineType", required = true)
+	public void setTemplateEngineName(String templateEngineType) {
+		this.templateEngine = templateEngines.get(templateEngineType);
+
+		log.debug(" - use template type:" + templateEngineType);
+		// configure template engine.
+		configure();
+	}
+
+	/**
+	 * loading di container configulation from struts-plugins.xml , choise thymeleaf template engine.
+	 * @param container
+	 */
+	@Inject
+	public void setContainer(Container container) {
+		log.debug("loading di container config.");
+		this.container = container;
+
+		Map<String, TemplateEngine> map = new HashMap<String, TemplateEngine>();
+
+		Set<String> prefixes = container.getInstanceNames(TemplateEngine.class);
+		for (String prefix : prefixes) {
+			TemplateEngine engine = (TemplateEngine) container.getInstance(TemplateEngine.class, prefix);
+
+			map.put(prefix, engine);
+			log.debug(" -- prefix:" + prefix + " / engine:" + engine.getClass().getName());
+		}
+		this.templateEngines = Collections.unmodifiableMap(map);
 	}
 }

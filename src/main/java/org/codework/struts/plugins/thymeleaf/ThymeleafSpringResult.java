@@ -32,7 +32,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.context.SpringWebContext;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.LocaleProvider;
@@ -67,7 +66,7 @@ public class ThymeleafSpringResult implements Result {
 	public static final String FIELD_ERRORS_NAME ="field";
 
 	/** struts2 convertion errors fields and value */
-	public static final String OVERWRITE_NAME = "overwrite";
+	public static final String OVERRIDES_NAME = "overrides";
 
 	public ThymeleafSpringResult() {
 	}
@@ -136,10 +135,6 @@ public class ThymeleafSpringResult implements Result {
 			// Struts2 field errors.( Map<fieldname , fielderrors>)
 			Map<String, List<String>> fieldErrors = actSupport.getFieldErrors();
 			variables.put(FIELD_ERRORS_NAME, fieldErrors);
-
-			// Struts2 convertion errors
-			ActionContext ctx = ActionContext.getContext();
-			variables.put(OVERWRITE_NAME, ctx.getValueStack().getExprOverrides());
 		}
 
 		return variables;
