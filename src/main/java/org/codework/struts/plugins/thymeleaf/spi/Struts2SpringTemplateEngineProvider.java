@@ -15,7 +15,7 @@
  */
 package org.codework.struts.plugins.thymeleaf.spi;
 
-import serendip.thymeleaf.FieldDiarect;
+import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
 
 /**
  * Struts2-Spring4-Thymeleaf implementation.{@link TemplateEngineProvider}.

@@ -66,11 +66,6 @@
         	<artifactId>spring-webmvc</artifactId>
         	<version>${spring.version}</version>
         </dependency>
-        <dependency>
-        	<groupId>serendip.lumi</groupId>
-        	<artifactId>thymeleaf-struts2-extension</artifactId>
-        	<version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
