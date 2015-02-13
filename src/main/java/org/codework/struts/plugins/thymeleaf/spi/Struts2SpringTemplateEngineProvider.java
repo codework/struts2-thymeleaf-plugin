@@ -15,6 +15,8 @@
  */
 package org.codework.struts.plugins.thymeleaf.spi;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
 
 /**
@@ -25,6 +27,7 @@ import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
  * @since 2.3.15
  * @version 2.3.20
  */
+@Slf4j
 public class Struts2SpringTemplateEngineProvider extends DefaultTemplateEngineProvider {
 
 	/**
@@ -32,6 +35,8 @@ public class Struts2SpringTemplateEngineProvider extends DefaultTemplateEnginePr
 	 * sensible defaults if values are not provided.
 	 */
 	public void configure() {
+		log.debug(" * configure *");
+
 		super.configure();
 
 		// add extended dialect.

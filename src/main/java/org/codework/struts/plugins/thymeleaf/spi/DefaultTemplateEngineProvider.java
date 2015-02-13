@@ -60,6 +60,8 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	 * sensible defaults if values are not provided.
 	 */
 	public void configure() {
+		log.debug(" configure.");
+
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
 		templateResolver.setTemplateMode(templateMode);
 		templateResolver.setCharacterEncoding(characterEncoding);
@@ -108,19 +110,6 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	}
 
 	/**
-	 * Thymeleaf template type loading from struts.properties.
-	 * @param templateEngineType ( default | spring )
-	 */
-	@Inject(value = "struts.thymeleaf.templateEngineType", required = true)
-	public void setTemplateEngineName(String templateEngineType) {
-		this.templateEngine = templateEngines.get(templateEngineType);
-
-		log.debug(" - use template type:" + templateEngineType);
-		// configure template engine.
-		configure();
-	}
-
-	/**
 	 * loading di container configulation from struts-plugins.xml , choise thymeleaf template engine.
 	 * @param container
 	 */
@@ -140,4 +129,20 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 		}
 		this.templateEngines = Collections.unmodifiableMap(map);
 	}
+
+	/**
+	 * Thymeleaf template type loading from struts.properties.
+	 * @param templateEngineType ( default | spring )
+	 */
+	@Inject(value = "struts.thymeleaf.templateEngineName", required = true)
+	public void setTemplateEngineName(String templateEngineName) {
+		this.templateEngine = templateEngines.get(templateEngineName);
+
+		log.debug(" - use template engine name :" + templateEngineName);
+		log.debug("       template engine class:" + this.templateEngine);
+		// configure template engine.
+		configure();
+	}
+
+
 }

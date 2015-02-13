@@ -24,6 +24,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsConstants;
 import org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider;
@@ -45,6 +47,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * @since 2.3.15
  * @version 2.3.20 ( Update A-pZ )
  */
+@Slf4j
 public class ThymeleafSpringResult implements Result {
 	private String defaultEncoding = "UTF-8";
 	private TemplateEngineProvider templateEngineProvider;
@@ -113,6 +116,9 @@ public class ThymeleafSpringResult implements Result {
 	@Inject
 	public void setTemplateEngineProvider(
 			TemplateEngineProvider templateEngineProvider) {
+
+		log.debug(" - templateEngineProvider :" + templateEngineProvider);
+
 		this.templateEngineProvider = templateEngineProvider;
 	}
 
