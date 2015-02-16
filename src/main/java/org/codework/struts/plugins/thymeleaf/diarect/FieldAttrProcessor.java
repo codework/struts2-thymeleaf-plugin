@@ -5,19 +5,23 @@ package org.codework.struts.plugins.thymeleaf.diarect;
 
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.struts2.util.ComponentUtils;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.Element;
 import org.thymeleaf.processor.attr.AbstractAttributeModifierAttrProcessor;
 import org.thymeleaf.standard.processor.attr.AbstractStandardSingleAttributeModifierAttrProcessor;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.util.ValueStack;
 
 /**
  * Thymeleaf extensions,field.
  * @author A-pZ
  *
  */
-//@Slf4j
+@Slf4j
 public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierAttrProcessor {
 	public static final int ATTR_PRECEDENCE = 1010;
 	public static final String ATTR_NAME = "value";
@@ -47,11 +51,16 @@ public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierA
 	 */
 	protected String processOverridesValue(String name , String value) {
 		ActionContext ctx = ActionContext.getContext();
-		Map<Object ,Object> overrideMap = ctx.getValueStack().getExprOverrides();
+		ValueStack stack = ctx.getValueStack();
+		Map<Object ,Object> overrideMap = stack.getExprOverrides();
 		if ( overrideMap != null && !overrideMap.isEmpty()) {
 			if (overrideMap.containsKey(name)) {
-				// log.debug("  - hit override map:[" + name + "] - " + value);
+				log.debug(" - hit override map:[" + name + "] - " + value);
 				String convertionValue = (String)overrideMap.get(name);
+
+				// Struts2-Conponent is wrapped String quote, which erase for output value.
+				String altString = ComponentUtils.stripExpressionIfAltSyntax(stack, convertionValue);
+				log.debug(" - alt string:" + altString);
 
 				return convertionValue;
 			}

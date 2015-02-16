@@ -22,7 +22,9 @@ import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.struts2.dispatcher.Dispatcher;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
+import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -72,10 +74,27 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
 		templateEngine.setTemplateResolver(templateResolver);
 		templateEngine.setMessageResolver(new StrutsMessageResolver());
+
+		// extension diarects.
+		FieldDiarect fieldDiarect = new FieldDiarect();
+		templateEngine.addDialect(fieldDiarect);
 	}
 
 	@Override
 	public TemplateEngine get() {
+		if ( templateEngine == null ) {
+			Container container = Dispatcher.getInstance().getContainer();
+			setContainer(container);
+			
+			// loading template engine from struts2 di container.
+			this.templateEngine = templateEngines.get(templateEngineName);
+
+			log.debug(" - use template engine name :" + templateEngineName);
+			log.debug("       template engine class:" + this.templateEngine);
+
+			configure();
+		}
+
 		return templateEngine;
 	}
 
@@ -110,16 +129,16 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	}
 
 	/**
-	 * loading di container configulation from struts-plugins.xml , choise thymeleaf template engine.
+	 * loading di container configulation from struts-plugin.xml , choise thymeleaf template engine.
 	 * @param container
 	 */
-	@Inject
 	public void setContainer(Container container) {
 		log.debug("loading di container config.");
 		this.container = container;
 
 		Map<String, TemplateEngine> map = new HashMap<String, TemplateEngine>();
-
+		
+		// loading TemplateEngine class from DI Container. 
 		Set<String> prefixes = container.getInstanceNames(TemplateEngine.class);
 		for (String prefix : prefixes) {
 			TemplateEngine engine = (TemplateEngine) container.getInstance(TemplateEngine.class, prefix);
@@ -134,14 +153,9 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	 * Thymeleaf template type loading from struts.properties.
 	 * @param templateEngineType ( default | spring )
 	 */
-	@Inject(value = "struts.thymeleaf.templateEngineName", required = true)
+	@Inject(value = "struts.thymeleaf.templateEngineName")
 	public void setTemplateEngineName(String templateEngineName) {
-		this.templateEngine = templateEngines.get(templateEngineName);
-
-		log.debug(" - use template engine name :" + templateEngineName);
-		log.debug("       template engine class:" + this.templateEngine);
-		// configure template engine.
-		configure();
+		this.templateEngineName = templateEngineName;
 	}
 
 

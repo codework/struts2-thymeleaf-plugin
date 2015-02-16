@@ -24,13 +24,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsConstants;
 import org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.context.WebApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.context.SpringWebContext;
 
@@ -47,7 +45,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * @since 2.3.15
  * @version 2.3.20 ( Update A-pZ )
  */
-@Slf4j
+//@Slf4j
 public class ThymeleafSpringResult implements Result {
 	private String defaultEncoding = "UTF-8";
 	private TemplateEngineProvider templateEngineProvider;
@@ -96,7 +94,9 @@ public class ThymeleafSpringResult implements Result {
 		Locale locale = ((LocaleProvider) action).getLocale();
 
 		// Spring-ApplicationContext.
-		ApplicationContext appctx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		//ApplicationContext appctx = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+		ApplicationContext appctx =
+				(ApplicationContext)servletContext.getAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
 		// Use SpringWebContext( by Thymeleaf-spring plugin. )
 		SpringWebContext context = new SpringWebContext(request, response,
@@ -116,9 +116,6 @@ public class ThymeleafSpringResult implements Result {
 	@Inject
 	public void setTemplateEngineProvider(
 			TemplateEngineProvider templateEngineProvider) {
-
-		log.debug(" - templateEngineProvider :" + templateEngineProvider);
-
 		this.templateEngineProvider = templateEngineProvider;
 	}
 

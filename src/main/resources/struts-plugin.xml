@@ -5,15 +5,14 @@
     "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <bean type="org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider" name="default" class="org.codework.struts.plugins.thymeleaf.spi.DefaultTemplateEngineProvider" />
-	<bean type="org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider" name="lumi" class="org.codework.struts.plugins.thymeleaf.spi.Struts2SpringTemplateEngineProvider" />
 
-    <bean type="org.thymeleaf.TemplateEngine" name="default" class="org.thymeleaf.TemplateEngine" />
+	<bean type="org.thymeleaf.TemplateEngine" name="default" class="org.thymeleaf.TemplateEngine" />
     <bean type="org.thymeleaf.TemplateEngine" name="spring" class="org.thymeleaf.spring4.SpringTemplateEngine" />
 
 	<package name="struts-thymeleaf" extends="struts-default">
         <result-types>
             <result-type name="thymeleaf" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
-            <result-type name="thymeleaf-spring" class="org.codework.struts.plugins.thymeleaf.ThymeleafSpringResult"/>
+            <result-type name="thymeleaf-spring" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
         </result-types>
     </package>
 </struts>
