@@ -12,7 +12,7 @@
 	<package name="struts-thymeleaf" extends="struts-default">
         <result-types>
             <result-type name="thymeleaf" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
-            <result-type name="thymeleaf-spring" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
+            <result-type name="thymeleaf-spring" class="org.codework.struts.plugins.thymeleaf.ThymeleafSpringResult"/>
         </result-types>
     </package>
 </struts>
