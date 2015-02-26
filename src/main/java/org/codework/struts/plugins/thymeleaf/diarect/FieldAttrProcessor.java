@@ -7,7 +7,7 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.struts2.util.ComponentUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.Element;
 import org.thymeleaf.processor.attr.AbstractAttributeModifierAttrProcessor;
@@ -59,10 +59,12 @@ public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierA
 				String convertionValue = (String)overrideMap.get(name);
 
 				// Struts2-Conponent is wrapped String quote, which erase for output value.
-				String altString = ComponentUtils.stripExpressionIfAltSyntax(stack, convertionValue);
+				String altString =  StringEscapeUtils.unescapeJava(convertionValue);
+				altString = altString.substring(1, altString.length() -1);
+				//String altString =
 				log.debug(" - alt string:" + altString);
 
-				return convertionValue;
+				return altString;
 			}
 		}
 		return value;

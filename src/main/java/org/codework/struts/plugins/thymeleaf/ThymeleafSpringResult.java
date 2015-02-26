@@ -124,7 +124,7 @@ public class ThymeleafSpringResult implements Result {
 	}
 
 	/**
-	 * Binding Struts2 action and context, field-errors , convertion error values bind another name.
+	 * Binding Struts2 action and context, field-errors bind another name.
 	 * @param action Action instance
 	 * @return ContextMap
 	 */
