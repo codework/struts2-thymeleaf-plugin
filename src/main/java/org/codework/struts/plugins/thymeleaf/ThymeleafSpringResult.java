@@ -45,7 +45,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * @since 2.3.15
  * @version 2.3.20 ( Update A-pZ )
  */
-//@Slf4j
 public class ThymeleafSpringResult implements Result {
 	private String defaultEncoding = "UTF-8";
 	private TemplateEngineProvider templateEngineProvider;
@@ -124,7 +123,7 @@ public class ThymeleafSpringResult implements Result {
 	}
 
 	/**
-	 * Binding Struts2 action and context, field-errors bind another name.
+	 * Binding Struts2 action and context, and field-errors list binding "field".
 	 * @param action Action instance
 	 * @return ContextMap
 	 */

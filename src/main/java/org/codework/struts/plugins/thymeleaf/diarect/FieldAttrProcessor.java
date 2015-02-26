@@ -5,8 +5,6 @@ package org.codework.struts.plugins.thymeleaf.diarect;
 
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.Element;
@@ -21,7 +19,6 @@ import com.opensymphony.xwork2.util.ValueStack;
  * @author A-pZ
  *
  */
-@Slf4j
 public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierAttrProcessor {
 	public static final int ATTR_PRECEDENCE = 1010;
 	public static final String ATTR_NAME = "value";
@@ -55,14 +52,11 @@ public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierA
 		Map<Object ,Object> overrideMap = stack.getExprOverrides();
 		if ( overrideMap != null && !overrideMap.isEmpty()) {
 			if (overrideMap.containsKey(name)) {
-				log.debug(" - hit override map:[" + name + "] - " + value);
 				String convertionValue = (String)overrideMap.get(name);
 
 				// Struts2-Conponent is wrapped String quote, which erase for output value.
 				String altString =  StringEscapeUtils.unescapeJava(convertionValue);
 				altString = altString.substring(1, altString.length() -1);
-				//String altString =
-				log.debug(" - alt string:" + altString);
 
 				return altString;
 			}

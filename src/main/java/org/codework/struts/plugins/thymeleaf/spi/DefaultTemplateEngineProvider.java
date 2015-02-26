@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.struts2.dispatcher.Dispatcher;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
 import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
@@ -36,8 +34,8 @@ import com.opensymphony.xwork2.inject.Inject;
  *
  * @author Steven Benitez
  * @since 2.3.15
+ * @version 2.3.20 A-pZ
  */
-@Slf4j
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	// HTML5 is the future!
 	private String templateMode = "HTML5";
@@ -62,8 +60,6 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	 * sensible defaults if values are not provided.
 	 */
 	public void configure() {
-		log.debug(" configure.");
-
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
 		templateResolver.setTemplateMode(templateMode);
 		templateResolver.setCharacterEncoding(characterEncoding);
@@ -85,13 +81,9 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 		if ( templateEngine == null ) {
 			Container container = Dispatcher.getInstance().getContainer();
 			setContainer(container);
-			
+
 			// loading template engine from struts2 di container.
 			this.templateEngine = templateEngines.get(templateEngineName);
-
-			log.debug(" - use template engine name :" + templateEngineName);
-			log.debug("       template engine class:" + this.templateEngine);
-
 			configure();
 		}
 
@@ -133,18 +125,15 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	 * @param container
 	 */
 	public void setContainer(Container container) {
-		log.debug("loading di container config.");
 		this.container = container;
 
 		Map<String, TemplateEngine> map = new HashMap<String, TemplateEngine>();
-		
-		// loading TemplateEngine class from DI Container. 
+
+		// loading TemplateEngine class from DI Container.
 		Set<String> prefixes = container.getInstanceNames(TemplateEngine.class);
 		for (String prefix : prefixes) {
 			TemplateEngine engine = (TemplateEngine) container.getInstance(TemplateEngine.class, prefix);
-
 			map.put(prefix, engine);
-			log.debug(" -- prefix:" + prefix + " / engine:" + engine.getClass().getName());
 		}
 		this.templateEngines = Collections.unmodifiableMap(map);
 	}
@@ -157,6 +146,4 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	public void setTemplateEngineName(String templateEngineName) {
 		this.templateEngineName = templateEngineName;
 	}
-
-
 }
