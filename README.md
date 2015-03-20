@@ -69,7 +69,7 @@ The following reflects the default settings.
     <constant name="struts.thymeleaf.cacheable" value="true"/>
     <constant name="struts.thymeleaf.cacheTtlMillis" value="3600000"/>
 
-
+    <constant name="struts.thymeleaf.templateEngineName" value="default"/>
 ## License
 
     Copyright 2013 Steven Benitez.

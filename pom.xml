@@ -5,7 +5,7 @@
     <groupId>org.codework</groupId>
     <artifactId>struts2-thymeleaf-plugin</artifactId>
     <packaging>jar</packaging>
-    <version>2.3.22</version>
+    <version>2.3.22-SNAPSHOT</version>
     <name>struts2-thymeleaf-plugin</name>
     <url>http://www.codework.org/struts2-thymeleaf-plugin</url>
     <properties>

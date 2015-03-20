@@ -51,7 +51,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
 	protected TemplateEngine templateEngine;
 
-	private String templateEngineName;
+	private String templateEngineName = "default";
 	private Container container;
 	private Map<String, TemplateEngine> templateEngines = new HashMap<String, TemplateEngine>();
 
@@ -140,7 +140,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
 	/**
 	 * Thymeleaf template type loading from struts.properties.
-	 * @param templateEngineType ( default | spring )
+	 * @param templateEngineName ( default | spring )
 	 */
 	@Inject(value = "struts.thymeleaf.templateEngineName")
 	public void setTemplateEngineName(String templateEngineName) {
