@@ -14,7 +14,7 @@ import org.thymeleaf.processor.IProcessor;
  * @author A-pZ
  *
  */
-public class FieldDiarect extends AbstractDialect {
+public class FieldDialect extends AbstractDialect {
 
 	@Override
 	public String getPrefix() {

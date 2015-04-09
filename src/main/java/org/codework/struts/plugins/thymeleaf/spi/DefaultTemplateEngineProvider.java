@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.apache.struts2.dispatcher.Dispatcher;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
-import org.codework.struts.plugins.thymeleaf.diarect.FieldDiarect;
+import org.codework.struts.plugins.thymeleaf.diarect.FieldDialect;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -72,8 +72,8 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 		templateEngine.setMessageResolver(new StrutsMessageResolver());
 
 		// extension diarects.
-		FieldDiarect fieldDiarect = new FieldDiarect();
-		templateEngine.addDialect(fieldDiarect);
+		FieldDialect fieldDialect = new FieldDialect();
+		templateEngine.addDialect(fieldDialect);
 	}
 
 	@Override
