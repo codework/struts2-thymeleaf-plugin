@@ -24,7 +24,6 @@ public class FieldDialect extends AbstractDialect {
 	public Set<IProcessor> getProcessors() {
 		final Set<IProcessor> processors = new HashSet<IProcessor>();
 		processors.add(new FieldAttrProcessor());
-		processors.add(new Struts2ErrorClassAttrProcessor());
 		return processors;
 	}
 
