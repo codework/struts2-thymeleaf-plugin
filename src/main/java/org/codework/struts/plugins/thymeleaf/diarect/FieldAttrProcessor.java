@@ -30,10 +30,7 @@ public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierA
 	protected String getTargetAttributeValue(Arguments arguments, Element element, String attributeName)
 	{
 		String attributeValue = super.getTargetAttributeValue(arguments, element, attributeName);
-		/*
-		if (element.hasNormalizedAttribute(Attribute.getPrefixFromAttributeName(attributeName), ATTR_NAME)) {
-			return attributeValue;
-		}*/
+
 		String name = element.getAttributeValueFromNormalizedName("name");
 		String type = element.getAttributeValueFromNormalizedName("type");
 		return processOverridesValue(name,attributeValue);
@@ -50,18 +47,23 @@ public class FieldAttrProcessor extends AbstractStandardSingleAttributeModifierA
 		ActionContext ctx = ActionContext.getContext();
 		ValueStack stack = ctx.getValueStack();
 		Map<Object ,Object> overrideMap = stack.getExprOverrides();
-		if ( overrideMap != null && !overrideMap.isEmpty()) {
-			if (overrideMap.containsKey(name)) {
-				String convertionValue = (String)overrideMap.get(name);
 
-				// Struts2-Conponent is wrapped String quote, which erase for output value.
-				String altString =  StringEscapeUtils.unescapeJava(convertionValue);
-				altString = altString.substring(1, altString.length() -1);
-
-				return altString;
-			}
+		if ( overrideMap == null || overrideMap.isEmpty()) {
+			return value;
 		}
-		return value;
+
+		if (! overrideMap.containsKey(name)) {
+			return value;
+		}
+
+
+		String convertionValue = (String)overrideMap.get(name);
+
+		// Struts2-Conponent is wrapped String quote, which erase for output value.
+		String altString =  StringEscapeUtils.unescapeJava(convertionValue);
+		altString = altString.substring(1, altString.length() -1);
+
+		return altString;
 	}
 
 	@Override
