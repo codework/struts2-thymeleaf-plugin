@@ -18,8 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * IF Struts2-Fielderror raise, append css-class for field.
  *
  * @author A-pZ
- * @Since 2.3.23
- */
+*/
 public class Struts2FieldErrorAttrProcessor extends
 		AbstractStandardSingleAttributeModifierAttrProcessor {
 

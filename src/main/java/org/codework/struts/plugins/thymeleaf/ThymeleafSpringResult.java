@@ -42,8 +42,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * Renders a Thymeleaf-Spring template as the result of invoking a Struts action.
  *
  * @author Steven Benitez ( Update A-pZ )
- * @since 2.3.15
- * @version 2.3.20 ( Update A-pZ )
  */
 public class ThymeleafSpringResult implements Result {
 	private String defaultEncoding = "UTF-8";
@@ -52,7 +50,7 @@ public class ThymeleafSpringResult implements Result {
 
 	/**
 	 * The result parameter name to set the name of the template to.
-	 * <p/>
+	 *
 	 * IMPORTANT! Struts2 will look for this field reflectively to determine
 	 * which parameter is the default. This allows us to have a simplified
 	 * result configuration. Don't remove it!

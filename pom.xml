@@ -10,7 +10,7 @@
 	<url>http://www.codework.org/struts2-thymeleaf-plugin</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<struts2.version>2.3.24-SNAPSHOT</struts2.version>
+		<struts2.version>2.3.24</struts2.version>
 		<thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
 		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>

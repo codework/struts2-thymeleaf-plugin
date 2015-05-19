@@ -33,8 +33,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * A default implementation of {@link TemplateEngineProvider}.
  *
  * @author Steven Benitez
- * @since 2.3.15
- * @version 2.3.20 A-pZ
  */
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 	// HTML5 is the future!
@@ -122,7 +120,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
 	/**
 	 * loading di container configulation from struts-plugin.xml , choise thymeleaf template engine.
-	 * @param container
+	 * @param container Struts2Container
 	 */
 	public void setContainer(Container container) {
 		this.container = container;

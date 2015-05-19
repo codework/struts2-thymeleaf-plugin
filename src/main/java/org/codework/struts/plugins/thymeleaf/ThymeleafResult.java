@@ -41,7 +41,7 @@ public class ThymeleafResult implements Result {
 
   /**
    * The result parameter name to set the name of the template to.
-   * <p/>
+   *
    * IMPORTANT! Struts2 will look for this field reflectively to determine which
    * parameter is the default. This allows us to have a simplified result
    * configuration. Don't remove it!
