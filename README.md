@@ -68,7 +68,34 @@ The following reflects the default settings.
     <constant name="struts.thymeleaf.suffix" value=".html"/>
     <constant name="struts.thymeleaf.cacheable" value="true"/>
     <constant name="struts.thymeleaf.cacheTtlMillis" value="3600000"/>
+    <constant name="struts.thymeleaf.templateEngineName" value="default"/>
+    
+## Version 2.3.24 - Spring support & type conversion handling 
 
+Since version 2.3.24 , this plugin provided accessibility for spring bean , and Struts2 type conversion error handling support.
+
+### How to use Spring Bean
+
+* use result type : thymeleaf-spring
+* in html template : ${beans.[BeanName]}
+* struts.properties : struts.thymeleaf.templateEngineName=spring
+
+### Hot to use Type conversion support field.
+
+use this namespace : sth
+this diarect supported value and errorclass such as thymeleaf spring support.
+
+Code example :
+
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" 
+     xmlns:th="http://www.thymeleaf.org" 
+     xmlns:sth="http://serendip.thymeleaf">
+     ...
+     <input name="name" type="text" value="" 
+      sth:value="${name}" sth:errorclass="field-error-background" />
+     ...
+    </html>
 
 ## License
 

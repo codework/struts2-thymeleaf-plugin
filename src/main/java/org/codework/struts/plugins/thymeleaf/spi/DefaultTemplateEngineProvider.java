@@ -15,86 +15,133 @@
  */
 package org.codework.struts.plugins.thymeleaf.spi;
 
-import com.opensymphony.xwork2.inject.Inject;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.struts2.dispatcher.Dispatcher;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
+import org.codework.struts.plugins.thymeleaf.diarect.FieldDialect;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * A default implementation of {@link TemplateEngineProvider}.
  *
  * @author Steven Benitez
- * @since 2.3.15
  */
 public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
-  // HTML5 is the future!
-  private String templateMode = "HTML5";
-  private String characterEncoding = "UTF-8";
-  // This will convert "home" to "/WEB-INF/templates/home.html"
-  private String prefix = "/WEB-INF/templates/";
-  private String suffix = ".html";
-  private boolean cacheable = true;
+	// HTML5 is the future!
+	private String templateMode = "HTML5";
+	private String characterEncoding = "UTF-8";
+	// This will convert "home" to "/WEB-INF/templates/home.html"
+	private String prefix = "/WEB-INF/templates/";
+	private String suffix = ".html";
+	private boolean cacheable = true;
 
-  // Default template cache TTL to 1 hour. If not set, entries would live in
-  // cache until expelled by LRU.
-  private Long cacheTtlMillis = 3600000L;
+	// Default template cache TTL to 1 hour. If not set, entries would live in
+	// cache until expelled by LRU.
+	private Long cacheTtlMillis = 3600000L;
 
-  private TemplateEngine templateEngine;
+	protected TemplateEngine templateEngine;
 
-  /**
-   * Configure settings from the struts.xml or struts.properties, using sensible
-   * defaults if values are not provided.
-   */
-  public void configure() {
-    ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-    templateResolver.setTemplateMode(templateMode);
-    templateResolver.setCharacterEncoding(characterEncoding);
-    templateResolver.setPrefix(prefix);
-    templateResolver.setSuffix(suffix);
-    templateResolver.setCacheable(cacheable);
-    templateResolver.setCacheTTLMs(cacheTtlMillis);
+	private String templateEngineName = "default";
+	private Container container;
+	private Map<String, TemplateEngine> templateEngines = new HashMap<String, TemplateEngine>();
 
-    templateEngine = new TemplateEngine();
-    templateEngine.setTemplateResolver(templateResolver);
-    templateEngine.setMessageResolver(new StrutsMessageResolver());
-  }
+	/**
+	 * Configure settings from the struts.xml or struts.properties, using
+	 * sensible defaults if values are not provided.
+	 */
+	public void configure() {
+		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+		templateResolver.setTemplateMode(templateMode);
+		templateResolver.setCharacterEncoding(characterEncoding);
+		templateResolver.setPrefix(prefix);
+		templateResolver.setSuffix(suffix);
+		templateResolver.setCacheable(cacheable);
+		templateResolver.setCacheTTLMs(cacheTtlMillis);
 
-  @Override
-  public TemplateEngine get() {
-    if (templateEngine == null) {
-      configure();
-    }
+		templateEngine.setTemplateResolver(templateResolver);
+		templateEngine.setMessageResolver(new StrutsMessageResolver());
 
-    return templateEngine;
-  }
+		// extension diarects.
+		FieldDialect fieldDialect = new FieldDialect();
+		templateEngine.addDialect(fieldDialect);
+	}
 
-  @Inject(value = "struts.thymeleaf.templateMode", required = false)
-  public void setTemplateMode(String templateMode) {
-    this.templateMode = templateMode;
-  }
+	@Override
+	public TemplateEngine get() {
+		if ( templateEngine == null ) {
+			Container container = Dispatcher.getInstance().getContainer();
+			setContainer(container);
 
-  @Inject(value = "struts.thymeleaf.encoding", required = false)
-  public void setCharacterEncoding(String characterEncoding) {
-    this.characterEncoding = characterEncoding;
-  }
+			// loading template engine from struts2 di container.
+			this.templateEngine = templateEngines.get(templateEngineName);
+			configure();
+		}
 
-  @Inject(value = "struts.thymeleaf.prefix", required = false)
-  public void setPrefix(String prefix) {
-    this.prefix = prefix;
-  }
+		return templateEngine;
+	}
 
-  @Inject(value = "struts.thymeleaf.suffix", required = false)
-  public void setSuffix(String suffix) {
-    this.suffix = suffix;
-  }
+	@Inject(value = "struts.thymeleaf.templateMode", required = false)
+	public void setTemplateMode(String templateMode) {
+		this.templateMode = templateMode;
+	}
 
-  @Inject(value = "struts.thymeleaf.cacheable", required = false)
-  public void setCacheable(String cacheable) {
-    this.cacheable = Boolean.parseBoolean(cacheable);
-  }
+	@Inject(value = "struts.thymeleaf.encoding", required = false)
+	public void setCharacterEncoding(String characterEncoding) {
+		this.characterEncoding = characterEncoding;
+	}
 
-  @Inject(value = "struts.thymeleaf.cacheTtlMillis", required = false)
-  public void setCacheTtlMillis(String cacheTtlMillis) {
-    this.cacheTtlMillis = Long.parseLong(cacheTtlMillis);
-  }
+	@Inject(value = "struts.thymeleaf.prefix", required = false)
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	@Inject(value = "struts.thymeleaf.suffix", required = false)
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
+
+	@Inject(value = "struts.thymeleaf.cacheable", required = false)
+	public void setCacheable(String cacheable) {
+		this.cacheable = Boolean.parseBoolean(cacheable);
+	}
+
+	@Inject(value = "struts.thymeleaf.cacheTtlMillis", required = false)
+	public void setCacheTtlMillis(String cacheTtlMillis) {
+		this.cacheTtlMillis = Long.parseLong(cacheTtlMillis);
+	}
+
+	/**
+	 * loading di container configulation from struts-plugin.xml , choise thymeleaf template engine.
+	 * @param container Struts2Container
+	 */
+	public void setContainer(Container container) {
+		this.container = container;
+
+		Map<String, TemplateEngine> map = new HashMap<String, TemplateEngine>();
+
+		// loading TemplateEngine class from DI Container.
+		Set<String> prefixes = container.getInstanceNames(TemplateEngine.class);
+		for (String prefix : prefixes) {
+			TemplateEngine engine = (TemplateEngine) container.getInstance(TemplateEngine.class, prefix);
+			map.put(prefix, engine);
+		}
+		this.templateEngines = Collections.unmodifiableMap(map);
+	}
+
+	/**
+	 * Thymeleaf template type loading from struts.properties.
+	 * @param templateEngineName ( default | spring )
+	 */
+	@Inject(value = "struts.thymeleaf.templateEngineName")
+	public void setTemplateEngineName(String templateEngineName) {
+		this.templateEngineName = templateEngineName;
+	}
 }

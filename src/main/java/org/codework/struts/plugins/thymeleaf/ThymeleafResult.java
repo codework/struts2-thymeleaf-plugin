@@ -15,17 +15,18 @@
  */
 package org.codework.struts.plugins.thymeleaf;
 
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.Result;
-import com.opensymphony.xwork2.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsConstants;
 import org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider;
 import org.thymeleaf.TemplateEngine;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.Result;
+import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * Renders a Thymeleaf template as the result of invoking a Struts action.
@@ -40,7 +41,7 @@ public class ThymeleafResult implements Result {
 
   /**
    * The result parameter name to set the name of the template to.
-   * <p/>
+   *
    * IMPORTANT! Struts2 will look for this field reflectively to determine which
    * parameter is the default. This allows us to have a simplified result
    * configuration. Don't remove it!

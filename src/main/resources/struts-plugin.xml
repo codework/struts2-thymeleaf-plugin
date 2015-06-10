@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE struts PUBLIC
-        "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
-        "http://struts.apache.org/dtds/struts-2.1.7.dtd">
-
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <bean type="org.codework.struts.plugins.thymeleaf.spi.TemplateEngineProvider" name="default" class="org.codework.struts.plugins.thymeleaf.spi.DefaultTemplateEngineProvider" />
 
-    <package name="struts-thymeleaf" extends="struts-default">
+	<bean type="org.thymeleaf.TemplateEngine" name="default" class="org.thymeleaf.TemplateEngine" />
+    <bean type="org.thymeleaf.TemplateEngine" name="spring" class="org.thymeleaf.spring4.SpringTemplateEngine" />
+
+	<package name="struts-thymeleaf" extends="struts-default">
         <result-types>
             <result-type name="thymeleaf" class="org.codework.struts.plugins.thymeleaf.ThymeleafResult"/>
+            <result-type name="thymeleaf-spring" class="org.codework.struts.plugins.thymeleaf.ThymeleafSpringResult"/>
         </result-types>
     </package>
 </struts>

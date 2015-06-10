@@ -15,17 +15,18 @@
  */
 package org.codework.struts.plugins.thymeleaf;
 
-import com.opensymphony.xwork2.LocaleProvider;
-import org.thymeleaf.context.WebContext;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.thymeleaf.context.WebContext;
+
+import com.opensymphony.xwork2.LocaleProvider;
+
 /**
  * Extends the {@link org.thymeleaf.context.WebContext} to provide access to the
  * Struts action.
- * <p/>
+ *
  * For actions that implement the {@link com.opensymphony.xwork2.LocaleProvider}
  * interface (i.e., actions that extend ActionSupport), the action's locale will
  * be used in this context. Otherwise, the context will default to the

@@ -1,0 +1,6 @@
+ChangeLog 2.3.16.3 -> 2.3.22
+
+* Add new result-type : "thymeleaf-spring" , usable to spring beans '${beans.(beanName)}'.
+* Add new diarect for Struts2 Type convertion error output, namespace and attribute 'sth:field'.
+* Add support output Struts2 'Field error' , named 'field'. An example usage ${field['task']}.
+
