@@ -19,6 +19,7 @@ import com.opensymphony.xwork2.inject.Inject;
 import org.codework.struts.plugins.thymeleaf.StrutsMessageResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 /**
  * A default implementation of {@link TemplateEngineProvider}.
@@ -56,6 +57,7 @@ public class DefaultTemplateEngineProvider implements TemplateEngineProvider {
 
     templateEngine = new TemplateEngine();
     templateEngine.setTemplateResolver(templateResolver);
+    templateEngine.addDialect(new LayoutDialect());
     templateEngine.setMessageResolver(new StrutsMessageResolver());
   }
 

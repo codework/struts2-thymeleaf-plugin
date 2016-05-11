@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <struts2.version>2.3.16.3</struts2.version>
         <thymeleaf.version>2.1.3.RELEASE</thymeleaf.version>
+        <thymeleaf-layout-dialect.version>1.2.7</thymeleaf-layout-dialect.version>
     </properties>
 
     <repositories>
@@ -38,6 +39,12 @@
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
             <version>${thymeleaf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>${thymeleaf-layout-dialect.version}</version>
         </dependency>
     </dependencies>
     <build>
