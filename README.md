@@ -2,6 +2,12 @@
 
 A Struts2 plug-in for using the [Thymeleaf](http://www.thymeleaf.org) templating engine.
 
+## IMPORTANT NOTICE
+
+**This project has been discontinued.** The plug-in was a proof-of-concept and is no
+longer maintained. Your best bet is to fork this repository and maintain your
+own version or derive new works from it.
+
 ## Example Usage
 
 The examples below show you how to map an action's result to a Thymeleaf

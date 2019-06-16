@@ -16,7 +16,8 @@
 package org.codework.struts.plugins.thymeleaf;
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.util.LocalizedTextUtil;
+import com.opensymphony.xwork2.LocalizedTextProvider;
+import com.opensymphony.xwork2.util.StrutsLocalizedTextProvider;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.messageresolver.AbstractMessageResolver;
 import org.thymeleaf.messageresolver.MessageResolution;
@@ -29,9 +30,11 @@ import org.thymeleaf.messageresolver.MessageResolution;
  * @since 2.3.15
  */
 public class StrutsMessageResolver extends AbstractMessageResolver {
+  private final LocalizedTextProvider localizedTextProvider = new StrutsLocalizedTextProvider();
+
   @Override
   public MessageResolution resolveMessage(Arguments arguments, String key, Object[] messageParameters) {
-    String message = LocalizedTextUtil.findDefaultText(key, ActionContext.getContext().getLocale(), messageParameters);
+    String message = localizedTextProvider.findDefaultText(key, ActionContext.getContext().getLocale(), messageParameters);
     return new MessageResolution(message);
   }
 }
